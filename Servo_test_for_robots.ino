@@ -14,7 +14,7 @@ int pos2 = 90;
 
 int leftDistanceToObject = 0;
 int rightDistanceToObject = 0;
- 
+
 void setup() 
 { 
   Serial.begin(9600);
@@ -85,19 +85,31 @@ void squareDance() {
   turn(120);
 }
 
+void beep(int time, int frequency) {
+  tone(11, frequency);
+  delay(time);
+  tone(11, frequency/5);
+  delay(time);
+  noTone(11);
+}
+
 void decideWhichDirectionToTurn() {
+  beep(300, 250);
+  turn(60);
+  beep(100, 750);
   int sensorValue = analogRead(A0);
-  turn(60);
-  leftDistanceToObject = sensorValue;
+  rightDistanceToObject = sensorValue;
   turn(120);
   turn(120);
+  beep(100, 750);
   int sensorValueTwo = analogRead(A0);
-  rightDistanceToObject = sensorValueTwo;
-  turn(60);
-  if (leftDistanceToObject < rightDistanceToObject) {
-    turn(60);
+  leftDistanceToObject = sensorValueTwo;
+  if (leftDistanceToObject > rightDistanceToObject) {
+    // Keep going
   } else {
-    turn(120);
+    // Turn around
+    turn(60);
+    turn(60);
   }
 }
 
