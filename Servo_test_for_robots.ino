@@ -4,6 +4,7 @@
 
 #include <Servo.h>
 #include <NewPing.h>
+// Download NewPing library: http://playground.arduino.cc/Code/NewPing
 
 #define TRIGGER_PIN  7  // Arduino pin tied to trigger pin on the ultrasonic sensor.
 #define ECHO_PIN     6  // Arduino pin tied to echo pin on the ultrasonic sensor.
