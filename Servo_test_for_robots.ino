@@ -1,10 +1,16 @@
-// Sweep
-// by BARRAGAN <http://barraganstudio.com> 
-// This example code is in the public domain.
+// A small robot built with cardboard and sticky tape to teach basic robotics
+// by sighmon & pix
+// Please re-use, re-mix, copy, paste as desired
 
+#include <Servo.h>
+#include <NewPing.h>
 
-#include <Servo.h> 
- 
+#define TRIGGER_PIN  7  // Arduino pin tied to trigger pin on the ultrasonic sensor.
+#define ECHO_PIN     6  // Arduino pin tied to echo pin on the ultrasonic sensor.
+#define MAX_DISTANCE 200 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
+
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
+
 Servo myservo;  // create servo object to control a servo 
 Servo myservo2;
                 // a maximum of eight servo objects can be created 
@@ -15,9 +21,15 @@ int pos2 = 90;
 int leftDistanceToObject = 0;
 int rightDistanceToObject = 0;
 
+int eyes = A0;
+//int eyes = A1;
+
 void setup() 
 { 
+  // Serial speed for infra red sensor
   Serial.begin(9600);
+  // Serial speed for ultrasonic sensor
+  Serial.begin(115200);
   myservo.attach(8);  // attaches the servo on pin 8 to the servo object 
   myservo2.attach(9);  // attaches the servo on pin 8 to the servo object 
 //  pinMode(9, OUTPUT);  // pin for +5v
@@ -29,9 +41,17 @@ void setup()
  
 void loop() 
 { 
-  int sensorValue = analogRead(A0);
-  Serial.println(sensorValue);
-  if (sensorValue < 300) {
+  // Infrared sensor
+  // int sensorValue = analogRead(eyes);
+  // Serial.println(sensorValue);
+  // Ultrasonic sensor
+  unsigned int sensorValue = sonar.ping() / US_ROUNDTRIP_CM;
+  Serial.print("Ping: ");
+  Serial.print(sensorValue); // Convert ping time to distance in cm and print result (0 = outside set distance range)
+  Serial.println("cm");
+  
+  // if (sensorValue < 300) { // For the infrared
+  if (sensorValue > 20) { // For the ultrasonic
     driveForward(100);
   } else {
 //    driveBackward(1000);
@@ -97,17 +117,20 @@ void decideWhichDirectionToTurn() {
   beep(300, 250);
   turn(60);
   beep(100, 750);
-  int sensorValue = analogRead(A0);
-  rightDistanceToObject = sensorValue;
+  //int sensorValue = analogRead(eyes);
+  //rightDistanceToObject = sensorValue;
+  rightDistanceToObject = sonar.ping() / US_ROUNDTRIP_CM;
   turn(120);
   turn(120);
   beep(100, 750);
-  int sensorValueTwo = analogRead(A0);
-  leftDistanceToObject = sensorValueTwo;
-  if (leftDistanceToObject > rightDistanceToObject) {
+  //int sensorValueTwo = analogRead(eyes);
+  //leftDistanceToObject = sensorValueTwo;
+  leftDistanceToObject = sonar.ping() / US_ROUNDTRIP_CM;
+  // if (leftDistanceToObject < rightDistanceToObject) { // For infrared
+  if (leftDistanceToObject > rightDistanceToObject) { // For ultrasonic
     // Keep going
   } else {
-    // Turn around
+    // Turn right
     turn(60);
     turn(60);
   }
