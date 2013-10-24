@@ -5,6 +5,7 @@
 #include <Servo.h>
 #include <NewPing.h>
 // Download NewPing library: http://playground.arduino.cc/Code/NewPing
+// and apply this fix: http://code.google.com/p/arduino-new-ping/wiki/HELP_Error_Vector_7_When_Compiling
 
 #define TRIGGER_PIN  7  // Arduino pin tied to trigger pin on the ultrasonic sensor.
 #define ECHO_PIN     6  // Arduino pin tied to echo pin on the ultrasonic sensor.
@@ -88,7 +89,7 @@ void driveForward(int time) {
 void turn(int pos) {
   myservo.write(pos);
   myservo2.write(pos);
-  delay(600);
+  delay(300);
   pos = 90;
   pos2 = 90;
   myservo.write(pos);
