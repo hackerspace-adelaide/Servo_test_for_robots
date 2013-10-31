@@ -18,6 +18,9 @@
 int lastHazard = 0;
 int hazardState = 0;
 
+int lastIndicator = 0;
+int indicatorState = 0;
+
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 
 Servo myservo;  // create servo object to control a servo 
@@ -76,6 +79,19 @@ void loop()
       digitalWrite(HAZARD_PIN,LOW);
     }
   }
+  
+  if(lastIndicator+800 < now) {
+    lastIndicator = now;
+    indicatorState = !indicatorState;
+    if(indicatorState) {
+      digitalWrite(INDICATOR_LEFT_PIN,HIGH);
+      digitalWrite(INDICATOR_RIGHT_PIN,LOW);
+    }  else { 
+      digitalWrite(INDICATOR_LEFT_PIN,LOW);
+      digitalWrite(INDICATOR_RIGHT_PIN,HIGH);
+    }
+  }
+  
   
   // if (sensorValue < 300) { // For the infrared
   if (sensorValue > 20) { // For the ultrasonic
