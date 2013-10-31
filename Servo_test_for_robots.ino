@@ -15,8 +15,8 @@
 #define INDICATOR_LEFT_PIN A1
 #define INDICATOR_RIGHT_PIN A2
 
-int lastBlink = 0;
-int blinkState = 0;
+int lastHazard = 0;
+int hazardState = 0;
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 
@@ -66,9 +66,11 @@ void loop()
   Serial.print(sensorValue); // Convert ping time to distance in cm and print result (0 = outside set distance range)
   Serial.println("cm");
   
-  if(lastBlink+500 < millis()) {
-    blinkState = !blinkState;
-    if(blinkState) {
+  int now = millis();
+  if(lastHazard+500 < now) {
+    lastHazard = now;
+    hazardState = !hazardState;
+    if(hazardState) {
       digitalWrite(HAZARD_PIN,HIGH);
     }  else { 
       digitalWrite(HAZARD_PIN,LOW);
