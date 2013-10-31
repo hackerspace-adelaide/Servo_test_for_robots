@@ -56,6 +56,9 @@ void setup()
   pinMode(13,OUTPUT); // green
   
   pinMode(HAZARD_PIN,OUTPUT);
+  pinMode(INDICATOR_LEFT_PIN,OUTPUT);
+  pinMode(INDICATOR_RIGHT_PIN,OUTPUT);
+
 }
  
 void loop() 
