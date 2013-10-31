@@ -26,6 +26,8 @@ int rightDistanceToObject = 0;
 int eyes = A0;
 //int eyes = A1;
 
+int freeCount = 0;
+
 void setup() 
 { 
   // Serial speed for infra red sensor
@@ -38,8 +40,11 @@ void setup()
 //  digitalWrite(9, HIGH);
 //  pinMode(8, OUTPUT);  // pin for Ground
 //  digitalWrite(8, LOW);
-} 
- 
+
+  pinMode(10,OUTPUT); // red
+  pinMode(12,OUTPUT); // yellow
+  pinMode(13,OUTPUT); // green
+}
  
 void loop() 
 { 
@@ -54,9 +59,15 @@ void loop()
   
   // if (sensorValue < 300) { // For the infrared
   if (sensorValue > 20) { // For the ultrasonic
+    freeCount++;
+    if(freeCount==50) {
+      freedomDance();
+      freeCount=0;
+    }
     driveForward(100);
   } else {
 //    driveBackward(1000);
+    freeCount = 0;
     decideWhichDirectionToTurn();
   }
 //  squareDance();
@@ -115,8 +126,56 @@ void beep(int time, int frequency) {
   noTone(11);
 }
 
+void freedomDance() {
+  for(int i=random(10,20);i>=0;i--) {
+    digitalWrite(10,HIGH);
+    digitalWrite(12,LOW);
+    digitalWrite(13,LOW);
+    tone(11,random(100,500));
+    if(random(2)) {
+      turn(120);
+    } else {
+      turn(60);
+    }
+  }
+  noTone(11);
+}
+
 void decideWhichDirectionToTurn() {
-  beep(300, 250);
+  digitalWrite(10,HIGH);
+  digitalWrite(12,LOW);
+  digitalWrite(13,LOW);
+  // screech
+  for(int i=0;i<100;i++) {
+    //beep(random(20,2000),10);
+    tone(11,random(1000,2000));
+    delay(1);
+  }
+  digitalWrite(10,LOW);
+  digitalWrite(12,HIGH);
+  digitalWrite(13,LOW);
+  // screech
+  for(int i=0;i<200;i++) {
+    //beep(random(20,2000),10);
+    tone(11,random(2000,3000));
+    delay(1);
+  }
+  digitalWrite(10,LOW);
+  digitalWrite(12,LOW);
+  digitalWrite(13,HIGH);
+  // screech
+  for(int i=0;i<300;i++) {
+    //beep(random(20,2000),10);
+    tone(11,random(3000,4000));
+    delay(1);
+  }
+  digitalWrite(10,LOW);
+  digitalWrite(12,LOW);
+  digitalWrite(13,LOW);
+  noTone(11);
+  
+  //beep(300, 250);
+  
   turn(60);
   beep(100, 750);
   //int sensorValue = analogRead(eyes);
