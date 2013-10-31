@@ -77,6 +77,9 @@ void loop()
     }
   }
   
+  // We don't have a sensor yet, so set the sensorValue;
+  sensorValue = 30;
+  
   // if (sensorValue < 300) { // For the infrared
   if (sensorValue > 20) { // For the ultrasonic
     freeCount++;
