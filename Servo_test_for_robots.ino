@@ -11,6 +11,13 @@
 #define ECHO_PIN     6  // Arduino pin tied to echo pin on the ultrasonic sensor.
 #define MAX_DISTANCE 200 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 
+#define HAZARD_PIN         A0
+#define INDICATOR_LEFT_PIN A1
+#define INDICATOR_RIGHT_PIN A2
+
+int lastBlink = 0;
+int blinkState = 0;
+
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 
 Servo myservo;  // create servo object to control a servo 
@@ -33,7 +40,7 @@ void setup()
   // Serial speed for infra red sensor
   Serial.begin(9600);
   // Serial speed for ultrasonic sensor
-  Serial.begin(115200);
+  //Serial.begin(115200);
   myservo.attach(8);  // attaches the servo on pin 8 to the servo object 
   myservo2.attach(9);  // attaches the servo on pin 8 to the servo object 
 //  pinMode(9, OUTPUT);  // pin for +5v
@@ -44,6 +51,8 @@ void setup()
   pinMode(10,OUTPUT); // red
   pinMode(12,OUTPUT); // yellow
   pinMode(13,OUTPUT); // green
+  
+  pinMode(HAZARD_PIN,OUTPUT);
 }
  
 void loop() 
@@ -56,6 +65,15 @@ void loop()
   Serial.print("Ping: ");
   Serial.print(sensorValue); // Convert ping time to distance in cm and print result (0 = outside set distance range)
   Serial.println("cm");
+  
+  if(lastBlink+500 < millis()) {
+    blinkState = !blinkState;
+    if(blinkState) {
+      digitalWrite(HAZARD_PIN,HIGH);
+    }  else { 
+      digitalWrite(HAZARD_PIN,LOW);
+    }
+  }
   
   // if (sensorValue < 300) { // For the infrared
   if (sensorValue > 20) { // For the ultrasonic
