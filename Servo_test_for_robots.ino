@@ -79,11 +79,10 @@ void loop()
       digitalWrite(HAZARD_PIN,LOW);
     }
   }
-  
-<<<<<<< HEAD
+
   // We don't have a sensor yet, so set the sensorValue;
   sensorValue = 30;
-=======
+
   if(lastIndicator+800 < now) {
     lastIndicator = now;
     indicatorState = !indicatorState;
@@ -95,8 +94,6 @@ void loop()
       digitalWrite(INDICATOR_RIGHT_PIN,HIGH);
     }
   }
-  
->>>>>>> 547bd02a6454c1d3f9834d284a1caaeae7db7ae6
   
   // if (sensorValue < 300) { // For the infrared
   if (sensorValue > 20) { // For the ultrasonic
